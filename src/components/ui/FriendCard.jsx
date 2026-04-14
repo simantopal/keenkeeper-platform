@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 const FriendCard = ({friend}) => {
 
@@ -9,11 +10,11 @@ const FriendCard = ({friend}) => {
     };
 
     return (
-        <div className="card bg-base-100 shadow-sm">
+        <Link to={`/friendDetails/${friend.id}`} className="card bg-base-100 shadow-sm">
             <figure>
                 <img
                 src={friend.picture}
-                alt="Friends" className='rounded-full' />
+                alt="Friends" className='rounded-full mt-6' />
             </figure>
             <div className="card-body text-center items-center">
                 <h2 className="card-title font-semibold text-xl">
@@ -30,7 +31,7 @@ const FriendCard = ({friend}) => {
                     {friend.status}                
                 </div>                              
             </div>
-        </div>
+        </Link>
     );
 };
 
