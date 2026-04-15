@@ -18,7 +18,7 @@ const FriendProvider = ({children}) => {
                 toast.error("The friend is already called")
             }else{
                 setCalls([...calls, currentFriend]);
-                toast.success(`${currentFriend.name} is Call`);
+                toast.success(`Call with ${currentFriend.name}`);
             }
             console.log(currentFriend, calls, 'friend')
     }
@@ -32,7 +32,7 @@ const FriendProvider = ({children}) => {
                 toast.error("The friend is already text")
             }else{
                 setTexts([...texts, currentFriend]);
-                toast.success(`${currentFriend.name} is Text`);
+                toast.success(`Text with ${currentFriend.name}`);
             }
             console.log(currentFriend, calls, 'friend')
     }
@@ -46,7 +46,7 @@ const FriendProvider = ({children}) => {
                 toast.error("The friend is already video")
             }else{
                 setVideos([...videos, currentFriend]);
-                toast.success(`${currentFriend.name} is video`);
+                toast.success(`video call with ${currentFriend.name}`);
             }
             console.log(currentFriend, calls, 'friend')
     }

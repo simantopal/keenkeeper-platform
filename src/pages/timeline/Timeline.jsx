@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { FriendContext } from '../../context/FriendProvider';
-import { PiHandshakeBold, PiChatText, PiVideoCamera  } from 'react-icons/pi';
+import { PiChatText, PiVideoCamera  } from 'react-icons/pi';
+import { BiPhoneCall } from 'react-icons/bi';
 
 const Timeline = () => {
 
@@ -26,7 +27,7 @@ const Timeline = () => {
             <div className='mb-6'>
                 <h2 className='font-bold text-5xl'>Timeline</h2>
             </div>
-            {/* filter */}
+
             <select
                 className="select select-bordered mb-6"
                 onChange={(e) => setType(e.target.value)}
@@ -38,7 +39,7 @@ const Timeline = () => {
                 <option value="video">Video</option>
             </select>
 
-            {/* timeline */}
+
             {filtered.length === 0 ? (
                 <div className='h-[30vh] bg-base-200 flex items-center justify-center rounded-lg'>
                     <h2 className='font-bold text-2xl text-gray-500'>No data in this Timeline</h2>
@@ -53,7 +54,7 @@ const Timeline = () => {
                     <div className="p-4 flex items-start gap-3">
 
                         <div className="bg-gray-100 p-2 rounded-lg text-xl">
-                        {item.type === "call" && <PiHandshakeBold className="text-yellow-500" />}
+                        {item.type === "call" && <BiPhoneCall className="text-yellow-500" />}
                         {item.type === "text" && <PiChatText className="text-blue-500" />}
                         {item.type === "video" && <PiVideoCamera className="text-purple-500" />}
                         </div>
@@ -83,3 +84,4 @@ const Timeline = () => {
 };
 
 export default Timeline;
+

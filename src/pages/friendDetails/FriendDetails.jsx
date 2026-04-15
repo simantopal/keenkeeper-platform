@@ -7,21 +7,13 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import { useLoaderData, useParams } from 'react-router';
 import { FriendContext } from '../../context/FriendProvider';
 
-// const friendsPromise = fetch('/friends.json').then(res => res.json())
 
 const FriendDetails = () => {
     const {id:friendParamsId} = useParams();
     console.log(friendParamsId, "friendParamsId")
-
-    // const friends = use(friendsPromise)
     const friends = useLoaderData();
-    // console.log(friends, 'friends')
-
     const expectedFriend = friends.find(friend => friend.id == friendParamsId)
-    // console.log(expectedFriend, "expectedFriend")
-
     const {id, name, picture, email, days_since_contact, status, tags, bio, goal, next_due_date} = expectedFriend;
-
     const {handleAsCall, handleAsText, handleAsVideo} = useContext(FriendContext)
 
 
@@ -32,101 +24,72 @@ const FriendDetails = () => {
     };
 
     
-
     return (
         <div className="bg-base-200">
             <div className="card container mx-auto py-10 lg:py-20 flex flex-col lg:flex-row gap-6">
                 <div className="w-full lg:w-80 space-y-4">
+                    <div className="card bg-base-100 shadow-sm pt-6">
+                        <figure>
+                        <img
+                            src={picture}
+                            alt="Friends"
+                            className="rounded-full w-20 h-20 mx-auto"
+                        />
+                        </figure>
 
-                {/* Profile Card */}
-                <div className="card bg-base-100 shadow-sm pt-6">
-                    <figure>
-                    <img
-                        src={picture}
-                        alt="Friends"
-                        className="rounded-full w-20 h-20 mx-auto"
-                    />
-                    </figure>
+                        <div className="card-body text-center items-center">
+                            <h2 className="card-title font-semibold text-xl">{name}</h2>
+                            <p>{days_since_contact}d ago</p>
 
-                    <div className="card-body text-center items-center">
+                            <div className={`badge rounded-full font-medium text-white ${getStatusColor(status)}`}>{status}</div>
 
-                    <h2 className="card-title font-semibold text-xl">
-                        {name}
-                    </h2>
+                            <div className="flex flex-wrap justify-center gap-2 mt-2">
+                                {tags.map((tag, ind) => (
+                                <div key={ind} className="badge bg-green-300 text-black font-medium">{tag}</div>
+                                ))}
+                            </div>
 
-                    <p>{days_since_contact}d ago</p>
-
-                    <div className={`badge rounded-full font-medium text-white ${getStatusColor(status)}`}>
-                        {status}
-                    </div>
-
-                    <div className="flex flex-wrap justify-center gap-2 mt-2">
-                        {tags.map((tag, ind) => (
-                        <div key={ind} className="badge bg-green-300 text-black font-medium">
-                            {tag}
+                            <p className="font-medium">{bio}</p>
+                            <p className="text-sm">Preferred: {email}</p>
                         </div>
-                        ))}
                     </div>
 
-                    <p className="font-medium">{bio}</p>
-                    <p className="text-sm">Preferred: {email}</p>
-
+                    <div className="space-y-2">
+                        <button className="btn bg-base-100 w-full font-medium"><PiBellZBold /> Snooze 2 weeks</button>
+                        <button className="btn bg-base-100 w-full font-medium"><FiArchive /> Archive</button>
+                        <button className="btn bg-base-100 w-full text-red-500 font-medium"><RiDeleteBinLine /> Delete</button>
                     </div>
-                </div>
-
-                {/* Actions */}
-                <div className="space-y-2">
-                    <button className="btn bg-base-100 w-full font-medium">
-                    <PiBellZBold /> Snooze 2 weeks
-                    </button>
-
-                    <button className="btn bg-base-100 w-full font-medium">
-                    <FiArchive /> Archive
-                    </button>
-
-                    <button className="btn bg-base-100 w-full text-red-500 font-medium">
-                    <RiDeleteBinLine /> Delete
-                    </button>
-                </div>
                 </div>
 
                 <div className="flex-1">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                         <div className="card bg-base-100 shadow-sm">
                             <div className="card-body text-center">
-                                <h2 className="text-3xl font-semibold mt-6">
-                                {days_since_contact}
-                                </h2>
+                                <h2 className="text-3xl font-semibold mt-6">{days_since_contact}</h2>
                                 <p className="mb-6 text-lg">Days Since Contact</p>
                             </div>
                         </div>
 
-                    <div className="card bg-base-100 shadow-sm">
-                    <div className="card-body text-center">
-                        <h2 className="text-3xl font-semibold mt-6">
-                        {goal}
-                        </h2>
-                        <p className="mb-6 text-lg">Goal (Days)</p>
-                    </div>
-                    </div>
+                        <div className="card bg-base-100 shadow-sm">
+                            <div className="card-body text-center">
+                                <h2 className="text-3xl font-semibold mt-6">{goal}</h2>
+                                <p className="mb-6 text-lg">Goal (Days)</p>
+                            </div>
+                        </div>
 
-                    <div className="card bg-base-100 shadow-sm">
-                    <div className="card-body text-center">
-                        <h2 className="text-3xl font-semibold mt-6">
-                        {next_due_date}
-                        </h2>
-                        <p className="mb-6 text-lg">Next Due</p>
-                    </div>
-                    </div>
+                        <div className="card bg-base-100 shadow-sm">
+                            <div className="card-body text-center">
+                                <h2 className="text-3xl font-semibold mt-6">{next_due_date}</h2>
+                                <p className="mb-6 text-lg">Next Due</p>
+                            </div>
+                        </div>
 
                     </div>
 
                     <div className="card bg-base-100 shadow-sm mb-6">
                         <div className="card-body">
                             <div className="flex flex-col sm:flex-row justify-between gap-3 sm:items-center">
-                                <p className="font-medium text-xl text-green-950">
-                                Relationship Goal
-                                </p>
+                                <p className="font-medium text-xl text-green-950">Relationship Goal</p>
                                 <button className="btn w-fit">Edit</button>
                             </div>
                             <p>Connect every {goal} days</p>
@@ -152,7 +115,6 @@ const FriendDetails = () => {
                             </div>
 
                             <div className="mt-4 space-y-3">
-
                                 {[
                                 { type: "Text", desc: "Asked for career advice", icon: <PiChatText /> },
                                 { type: "Call", desc: "Industry conference meetup", icon: <BiPhoneCall /> },
@@ -168,9 +130,7 @@ const FriendDetails = () => {
                                                 <p className="text-sm text-gray-500">{item.desc}</p>
                                             </div>
                                         </div>
-
                                         <div className="text-sm text-gray-400 mt-2 sm:mt-0 whitespace-nowrap">Jan 28, 2026</div>
-
                                     </div>
                                 ))}
                             </div>
