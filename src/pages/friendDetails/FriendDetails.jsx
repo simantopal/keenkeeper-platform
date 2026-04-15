@@ -1,22 +1,29 @@
 // import React, { use } from 'react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { BiPhoneCall } from 'react-icons/bi';
 import { FiArchive } from 'react-icons/fi';
 import { PiBellZBold, PiChatText, PiVideoCamera } from 'react-icons/pi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useLoaderData, useParams } from 'react-router';
+import { FriendContext } from '../../context/FriendProvider';
 
 // const friendsPromise = fetch('/friends.json').then(res => res.json())
 
 const FriendDetails = () => {
-    const {id} = useParams();
+    const {id:friendParamsId} = useParams();
+    console.log(friendParamsId, "friendParamsId")
 
     // const friends = use(friendsPromise)
     const friends = useLoaderData();
-    console.log(friends, 'friends')
+    // console.log(friends, 'friends')
 
-    const expectedFriend = friends.find(friend => friend.id == id)
-    console.log(expectedFriend, "expectedFriend")
+    const expectedFriend = friends.find(friend => friend.id == friendParamsId)
+    // console.log(expectedFriend, "expectedFriend")
+
+    const {id, name, picture, email, days_since_contact, status, tags, bio, goal, next_due_date} = expectedFriend;
+
+    const {handleAsCall, handleAsText, handleAsVideo} = useContext(FriendContext)
+
 
     const getStatusColor = (status) => {
         if (status === "on-track") return "bg-green-900 text-white";
@@ -24,20 +31,7 @@ const FriendDetails = () => {
         if (status === "overdue") return "bg-red-500 text-white";
     };
 
-    const [storeFriends, setStoreFriends] = useState([]);
-
-    const handleAsCall = (currentFriend) => {
-        console.log(currentFriend, storeFriends, 'friend')
-
-        const isExistFriend = storeFriends.find(
-            (friend) => friend.id === currentFriend.id)
-
-            if(isExistFriend){
-                alert("The friend is already called")
-            }else{
-                setStoreFriends([...storeFriends, currentFriend]);
-            }
-    }
+    
 
     return (
         <div className="bg-base-200">
@@ -48,7 +42,7 @@ const FriendDetails = () => {
                 <div className="card bg-base-100 shadow-sm pt-6">
                     <figure>
                     <img
-                        src={expectedFriend.picture}
+                        src={picture}
                         alt="Friends"
                         className="rounded-full w-20 h-20 mx-auto"
                     />
@@ -57,25 +51,25 @@ const FriendDetails = () => {
                     <div className="card-body text-center items-center">
 
                     <h2 className="card-title font-semibold text-xl">
-                        {expectedFriend.name}
+                        {name}
                     </h2>
 
-                    <p>{expectedFriend.days_since_contact}d ago</p>
+                    <p>{days_since_contact}d ago</p>
 
-                    <div className={`badge rounded-full font-medium text-white ${getStatusColor(expectedFriend.status)}`}>
-                        {expectedFriend.status}
+                    <div className={`badge rounded-full font-medium text-white ${getStatusColor(status)}`}>
+                        {status}
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-2 mt-2">
-                        {expectedFriend.tags.map((tag, ind) => (
+                        {tags.map((tag, ind) => (
                         <div key={ind} className="badge bg-green-300 text-black font-medium">
                             {tag}
                         </div>
                         ))}
                     </div>
 
-                    <p className="font-medium">{expectedFriend.bio}</p>
-                    <p className="text-sm">Preferred: {expectedFriend.email}</p>
+                    <p className="font-medium">{bio}</p>
+                    <p className="text-sm">Preferred: {email}</p>
 
                     </div>
                 </div>
@@ -101,7 +95,7 @@ const FriendDetails = () => {
                         <div className="card bg-base-100 shadow-sm">
                             <div className="card-body text-center">
                                 <h2 className="text-3xl font-semibold mt-6">
-                                {expectedFriend.days_since_contact}
+                                {days_since_contact}
                                 </h2>
                                 <p className="mb-6 text-lg">Days Since Contact</p>
                             </div>
@@ -110,7 +104,7 @@ const FriendDetails = () => {
                     <div className="card bg-base-100 shadow-sm">
                     <div className="card-body text-center">
                         <h2 className="text-3xl font-semibold mt-6">
-                        {expectedFriend.goal}
+                        {goal}
                         </h2>
                         <p className="mb-6 text-lg">Goal (Days)</p>
                     </div>
@@ -119,7 +113,7 @@ const FriendDetails = () => {
                     <div className="card bg-base-100 shadow-sm">
                     <div className="card-body text-center">
                         <h2 className="text-3xl font-semibold mt-6">
-                        {expectedFriend.next_due_date}
+                        {next_due_date}
                         </h2>
                         <p className="mb-6 text-lg">Next Due</p>
                     </div>
@@ -135,7 +129,7 @@ const FriendDetails = () => {
                                 </p>
                                 <button className="btn w-fit">Edit</button>
                             </div>
-                            <p>Connect every {expectedFriend.goal} days</p>
+                            <p>Connect every {goal} days</p>
                         </div>
                     </div>
 
@@ -144,8 +138,8 @@ const FriendDetails = () => {
                             <h2 className="text-xl font-semibold">Quick Check-In</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
                                 <button className="btn flex flex-col h-24 text-lg" onClick={()=> handleAsCall(expectedFriend)}><BiPhoneCall className="text-2xl" />Call</button>
-                                <button className="btn flex flex-col h-24 text-lg"><PiChatText className="text-2xl" />Text</button>
-                                <button className="btn flex flex-col h-24 text-lg"><PiVideoCamera className="text-2xl" />Video</button>
+                                <button className="btn flex flex-col h-24 text-lg" onClick={()=> handleAsText(expectedFriend)}><PiChatText className="text-2xl" />Text</button>
+                                <button className="btn flex flex-col h-24 text-lg" onClick={()=> handleAsVideo(expectedFriend)}><PiVideoCamera className="text-2xl" />Video</button>
                             </div>
                         </div>
                     </div>
