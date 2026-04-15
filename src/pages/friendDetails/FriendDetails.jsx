@@ -1,5 +1,5 @@
 // import React, { use } from 'react';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { BiPhoneCall } from 'react-icons/bi';
 import { FiArchive } from 'react-icons/fi';
 import { PiBellZBold, PiChatText, PiVideoCamera } from 'react-icons/pi';

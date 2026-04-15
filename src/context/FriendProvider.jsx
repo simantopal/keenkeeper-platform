@@ -1,27 +1,32 @@
 import React, { createContext, useState } from 'react';
 import { toast } from 'react-toastify';
+import { addTimelineToLocalDB, getAllTimelineFromLocalDB } from '../utilites/localDB';
 
 export const FriendContext = createContext();
 
 const FriendProvider = ({children}) => {
-    const [storeFriends, setStoreFriends] = useState([]);
-    const [texts, setTexts] = useState([]);
-    const [videos, setVideos] = useState([]);
+    const [calls, setCalls] = useState(()=> getAllTimelineFromLocalDB());
+    const [texts, setTexts] = useState(()=> getAllTimelineFromLocalDB());
+    const [videos, setVideos] = useState(()=> getAllTimelineFromLocalDB());
 
 
     const handleAsCall = (currentFriend) => {
-        const isExistFriend = storeFriends.find(
+        addTimelineToLocalDB(currentFriend);
+
+        const isExistFriend = calls.find(
             (friend) => friend.id === currentFriend.id)
 
             if(isExistFriend){
                 toast.error("The friend is already called")
             }else{
-                setStoreFriends([...storeFriends, currentFriend]);
+                setCalls([...calls, currentFriend]);
                 toast.success(`${currentFriend.name} is Call`);
             }
-            console.log(currentFriend, storeFriends, 'friend')
+            console.log(currentFriend, calls, 'friend')
     }
     const handleAsText = (currentFriend) => {
+        addTimelineToLocalDB(currentFriend);
+
         const isExistFriend = texts.find(
             (friend) => friend.id === currentFriend.id)
 
@@ -31,9 +36,11 @@ const FriendProvider = ({children}) => {
                 setTexts([...texts, currentFriend]);
                 toast.success(`${currentFriend.name} is Text`);
             }
-            console.log(currentFriend, storeFriends, 'friend')
+            console.log(currentFriend, calls, 'friend')
     }
     const handleAsVideo = (currentFriend) => {
+        addTimelineToLocalDB(currentFriend);
+
         const isExistFriend = videos.find(
             (friend) => friend.id === currentFriend.id)
 
@@ -43,12 +50,12 @@ const FriendProvider = ({children}) => {
                 setVideos([...videos, currentFriend]);
                 toast.success(`${currentFriend.name} is video`);
             }
-            console.log(currentFriend, storeFriends, 'friend')
+            console.log(currentFriend, calls, 'friend')
     }
 
 
     const data = {
-        storeFriends, setStoreFriends, handleAsCall, texts, setTexts, handleAsText, videos, setVideos, handleAsVideo
+        calls, setCalls, handleAsCall, texts, setTexts, handleAsText, videos, setVideos, handleAsVideo
     }
 
     return <FriendContext.Provider value={data}>

@@ -22,7 +22,7 @@ const Banner = () => {
                     
                     <div className="card bg-base-200 shadow-sm  rounded-2xl">
                         <div className="card-body items-center text-center">
-                            <h2 className="card-title font-semibold text-3xl mt-8">10</h2>
+                            <h2 className="card-title font-semibold text-3xl mt-8">12</h2>
                             <p className='mb-8 text-lg'>Total Friends</p>
                         </div>
                     </div>       
