@@ -12,10 +12,8 @@ const FriendProvider = ({children}) => {
 
     const handleAsCall = (currentFriend) => {
         addTimelineToLocalDB(currentFriend);
-
         const isExistFriend = calls.find(
             (friend) => friend.id === currentFriend.id)
-
             if(isExistFriend){
                 toast.error("The friend is already called")
             }else{
@@ -24,12 +22,12 @@ const FriendProvider = ({children}) => {
             }
             console.log(currentFriend, calls, 'friend')
     }
+
+
     const handleAsText = (currentFriend) => {
         addTimelineToLocalDB(currentFriend);
-
         const isExistFriend = texts.find(
             (friend) => friend.id === currentFriend.id)
-
             if(isExistFriend){
                 toast.error("The friend is already text")
             }else{
@@ -38,12 +36,12 @@ const FriendProvider = ({children}) => {
             }
             console.log(currentFriend, calls, 'friend')
     }
+
+
     const handleAsVideo = (currentFriend) => {
         addTimelineToLocalDB(currentFriend);
-
         const isExistFriend = videos.find(
             (friend) => friend.id === currentFriend.id)
-
             if(isExistFriend){
                 toast.error("The friend is already video")
             }else{

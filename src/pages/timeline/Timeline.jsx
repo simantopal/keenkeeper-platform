@@ -6,6 +6,7 @@ const Timeline = () => {
 
   const { calls, texts, videos } = useContext(FriendContext);
   const [type, setType] = useState("all");
+  const [topItem, setTopItem] = useState(null);
 
   const data = [
     ...calls.map(i => ({ ...i, type: "call" })),
@@ -15,6 +16,9 @@ const Timeline = () => {
 
   const filtered =
     type === "all" ? data : data.filter(item => item.type === type);
+    const orderedData = topItem
+  ? [topItem, ...filtered.filter(i => i !== topItem)]
+  : filtered;
 
   return (
     <div>
@@ -40,8 +44,12 @@ const Timeline = () => {
                     <h2 className='font-bold text-2xl text-gray-500'>No data in this Timeline</h2>
                 </div>
                 ) : (
-                filtered.map((item, ind) => (
-                <div key={ind} className="card shadow-sm mb-6 bg-base-200">
+                orderedData.map((item, ind) => (
+                <div
+                    key={ind}
+                    onClick={() => setTopItem(item)}
+                    className="card shadow-sm mb-6 bg-base-200 cursor-pointer"
+                >
                     <div className="p-4 flex items-start gap-3">
 
                         <div className="bg-gray-100 p-2 rounded-lg text-xl">
