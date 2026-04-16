@@ -1,64 +1,48 @@
 import React, { createContext, useState } from 'react';
 import { toast } from 'react-toastify';
-import { addTimelineToLocalDB, getAllTimelineFromLocalDB } from '../utilites/localDB';
 
 export const FriendContext = createContext();
 
-const FriendProvider = ({children}) => {
-    const [calls, setCalls] = useState(()=> getAllTimelineFromLocalDB());
-    const [texts, setTexts] = useState(()=> getAllTimelineFromLocalDB());
-    const [videos, setVideos] = useState(()=> getAllTimelineFromLocalDB());
+const FriendProvider = ({ children }) => {
+  const [timeline, setTimeline] = useState([]);
+  const addTimeline = (friend, type) => {
+    const newItem = {
+      ...friend,
+      type,
+      uniqueId: Date.now(),
+      createdAt: new Date()
+    };
 
+    setTimeline(prev => [newItem, ...prev]);
+  };
 
-    const handleAsCall = (currentFriend) => {
-        addTimelineToLocalDB(currentFriend);
-        const isExistFriend = calls.find(
-            (friend) => friend.id === currentFriend.id)
-            if(isExistFriend){
-                toast.error("The friend is already called")
-            }else{
-                setCalls([...calls, currentFriend]);
-                toast.success(`Call with ${currentFriend.name}`);
-            }
-            console.log(currentFriend, calls, 'friend')
-    }
+  const handleAsCall = (friend) => {
+    addTimeline(friend, "call");
+    toast.success(`Call with ${friend.name}`);
+  };
 
+  const handleAsText = (friend) => {
+    addTimeline(friend, "text");
+    toast.success(`Text with ${friend.name}`);
+  };
 
-    const handleAsText = (currentFriend) => {
-        addTimelineToLocalDB(currentFriend);
-        const isExistFriend = texts.find(
-            (friend) => friend.id === currentFriend.id)
-            if(isExistFriend){
-                toast.error("The friend is already text")
-            }else{
-                setTexts([...texts, currentFriend]);
-                toast.success(`Text with ${currentFriend.name}`);
-            }
-            console.log(currentFriend, calls, 'friend')
-    }
+  const handleAsVideo = (friend) => {
+    addTimeline(friend, "video");
+    toast.success(`Video call with ${friend.name}`);
+  };
 
-
-    const handleAsVideo = (currentFriend) => {
-        addTimelineToLocalDB(currentFriend);
-        const isExistFriend = videos.find(
-            (friend) => friend.id === currentFriend.id)
-            if(isExistFriend){
-                toast.error("The friend is already video")
-            }else{
-                setVideos([...videos, currentFriend]);
-                toast.success(`video call with ${currentFriend.name}`);
-            }
-            console.log(currentFriend, calls, 'friend')
-    }
-
-
-    const data = {
-        calls, setCalls, handleAsCall, texts, setTexts, handleAsText, videos, setVideos, handleAsVideo
-    }
-
-    return <FriendContext.Provider value={data}>
-        {children}
+  return (
+    <FriendContext.Provider
+      value={{
+        timeline,
+        handleAsCall,
+        handleAsText,
+        handleAsVideo
+      }}
+    >
+      {children}
     </FriendContext.Provider>
+  );
 };
 
 export default FriendProvider;

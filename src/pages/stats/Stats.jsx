@@ -9,28 +9,42 @@ const COLORS = {
 };
 
 const Stats = () => {
-  const { calls, texts, videos } = useContext(FriendContext);
 
+  const { timeline } = useContext(FriendContext);
+
+  // derive data from ONE source
   const data = useMemo(() => {
+
+    const callCount = timeline.filter(i => i.type === "call").length;
+    const textCount = timeline.filter(i => i.type === "text").length;
+    const videoCount = timeline.filter(i => i.type === "video").length;
+
     return [
-      { name: 'Call', value: calls?.length || 0, color: COLORS.call },
-      { name: 'Video', value: videos?.length || 0, color: COLORS.video },
-      { name: 'Text', value: texts?.length || 0, color: COLORS.text },
+      { name: 'Call', value: callCount, color: COLORS.call },
+      { name: 'Video', value: videoCount, color: COLORS.video },
+      { name: 'Text', value: textCount, color: COLORS.text },
     ];
-  }, [calls, texts, videos]);
+  }, [timeline]);
 
   const hasData = data.some(item => item.value > 0);
 
   return (
     <div className='container mx-auto my-20'>
+
       <h2 className="text-5xl font-bold text-slate-800 mb-4">
         Friendship Analytics
       </h2>
 
       <div className="p-6 bg-slate-50 rounded-xl shadow-sm border border-gray-100">
-        <p className="text-xl font-medium text-green-950 mb-8">By Interaction Type</p>
 
-        {!hasData ? (<div className="h-60 flex items-center justify-center text-gray-400 font-medium">No interaction data yet</div>
+        <p className="text-xl font-medium text-green-950 mb-8">
+          By Interaction Type
+        </p>
+
+        {!hasData ? (
+          <div className="h-60 flex items-center justify-center text-gray-400 font-medium text-2xl">
+            No interaction data yet
+          </div>
         ) : (
           <>
             <div className="h-80 w-full">
@@ -70,6 +84,7 @@ const Stats = () => {
             </div>
           </>
         )}
+
       </div>
     </div>
   );
